@@ -47,4 +47,4 @@ void main(int argc, char *argv[]) {
 	printf("Server has removed its shread memory ...\n");
 	printf("Server exits ...\n");
 	exit(0);
-} 
+}   
