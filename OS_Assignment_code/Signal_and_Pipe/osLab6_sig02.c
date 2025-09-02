@@ -3,7 +3,16 @@
 #include <signal.h>
 #include <unistd.h>
 
-void SIGhandler(int sig);
+void SIGhandler(int sig) {
+    switch (sig) {
+        case SIGINT:
+            printf("Ha Ha Ha ... you can not interrupt me ;P\n");
+            break;
+        case SIGQUIT:
+            printf("Ha Ha Ha ... you can not quit me ;P\n");
+            break;
+    }
+}
 
 int main(void) {
     /* Register Quit handler */
@@ -14,18 +23,13 @@ int main(void) {
     if (signal(SIGINT, SIGhandler) == SIG_ERR) {
         printf("\ncan't catch SIGINT\n");
     }
-    while (1) {
+    
+    printf("Running... Press Ctrl-C or Ctrl-\\ to send signals.\n");
+    printf("Use 'kill -9 %d' to terminate this process.\n", getpid());
+
+    while(1) {
         sleep(1);
     }
-    return (0);
-}
-
-void SIGhandler(int sig) {
-    switch (sig) {
-    case 2:
-        printf("Ha Ha Ha ... you can not interrupt me ;P\n");
-        break;
-    case 3:
-        printf("Ha Ha Ha ... you can not quit me ;P\n");
-    }
+    
+    return 0;
 }
