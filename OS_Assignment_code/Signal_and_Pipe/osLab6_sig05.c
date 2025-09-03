@@ -6,16 +6,17 @@
 #include <time.h>
 
 #define SLEEP 3
+int flag = 1; int count = 0; // Global Variables
 
-int flag = 1;
-int count = 0; // Global Variables
-
-void mySIGhandler(int sig);
+void mySIGhandler(int sig) {
+    signal(SIGUSR2, SIG_IGN); // Mask Signal
+    flag = 0;
+}
 
 void main() {
-    clock_t start;
-    pid_t pid;
+    clock_t start; pid_t pid;
     signal(SIGUSR2, mySIGhandler); // Register Signal Handler
+
     if ((pid = fork()) < 0) { // Fork process
         printf("fork failed");
         exit(1);
@@ -27,13 +28,8 @@ void main() {
     } else { // Parent process
         printf("Parent waiting signal ...\n");
         start = clock();
-        while (flag) count += 1;
+        while (flag) count+=1;
         printf("It takes %d loops\n", count);
-        printf("It takes %.2f sec.\n", (double)((clock() - start) / CLOCKS_PER_SEC));
+        printf("It takes %.2f sec.\n", (double)(clock() - start) / CLOCKS_PER_SEC);
     }
-}
-
-void mySIGhandler(int sig) {
-    signal(SIGUSR2, SIG_IGN); // Mask Signal
-    flag = 0;
 }
